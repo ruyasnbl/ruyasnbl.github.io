@@ -1,99 +1,53 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>LiangXD's Homepage</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    body {
-      font-family: 'Segoe UI', Roboto, Helvetica, sans-serif;
-      background: linear-gradient(135deg, #f5f7fa 0%, #e4eaf5 100%);
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #333;
-    }
-    .container {
-      text-align: center;
-      background: white;
-      padding: 60px 50px;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-      max-width: 500px;
-      width: 90%;
-    }
-    .avatar {
-      width: 100px;
-      height: 100px;
-      background: #5183f4;
-      border-radius: 50%;
-      margin: 0 auto 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 36px;
-      font-weight: bold;
-    }
-    h1 {
-      font-size: 32px;
-      margin-bottom: 10px;
-      color: #222;
-    }
-    .desc {
-      font-size: 16px;
-      color: #666;
-      margin-bottom: 30px;
-      line-height: 1.6;
-    }
-    .links {
-      display: flex;
-      gap: 12px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-    a {
-      padding: 12px 24px;
-      border-radius: 10px;
-      text-decoration: none;
-      font-weight: 500;
-      transition: all 0.2s;
-    }
-    .github {
-      background: #24292f;
-      color: white;
-    }
-    .github:hover {
-      background: #000;
-    }
-    .site {
-      background: #5183f4;
-      color: white;
-    }
-    .site:hover {
-      background: #3a6fe0;
-    }
-    .xd{
-      text-decoration: none !important;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>公共留言板</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Arial;background:#f5f5f5;padding:20px}
+.container{max-width:700px;margin:0 auto}
+.box{background:white;padding:16px;border-radius:10px;margin-bottom:10px;box-shadow:0 2px 5px #00000010}
+textarea{width:100%;height:80px;padding:10px;border-radius:8px;border:1px solid #ddd;margin-bottom:10px}
+button{padding:10px 20px;background:#0d8dec;color:white;border:none;border-radius:8px;cursor:pointer}
+.msg{background:#f9f9f9;padding:12px;border-radius:8px;margin-bottom:8px}
+</style>
 </head>
 <body>
-  <div class="container">
-    <div class="avatar">L</div>
-    <h1>LiangXD</h1>
-    <p class="desc">热爱编程、持续学习<br>这是我的 GitHub Pages 个人主页</p>
-    <div class="links">
-      <a href="https://github.com/liangxd21" class="github" target="_blank">GitHub</a>
-      <a href="https://liangxd21.github.io" class="site">个人主页</a>
-      <a href="./xd.html" class="xd">虫蝶的个人修养</a>
-    </div>
+<div class="container">
+  <div class="box">
+    <h3>公共留言板（所有人可发）</h3>
+    <textarea id="content" placeholder="写下你想说的话..."></textarea>
+    <button onclick="sendMsg()">发布留言</button>
   </div>
+
+  <div id="msgList"></div>
+</div>
+
+<script>
+// 从本地保存留言（简单可用版）
+function loadMsg(){
+  let list = JSON.parse(localStorage.getItem('msgs') || '[]')
+  let html = ''
+  list.forEach(m=>{
+    html+=`<div class="msg">${m.text}<br><small>${m.time}</small></div>`
+  })
+  document.getElementById('msgList').innerHTML = html
+}
+
+function sendMsg(){
+  let text = document.getElementById('content').value.trim()
+  if(!text)return
+  let time = new Date().toLocaleString()
+  let list = JSON.parse(localStorage.getItem('msgs') || '[]')
+  list.unshift({text,time})
+  localStorage.setItem('msgs',JSON.stringify(list))
+  document.getElementById('content').value=''
+  loadMsg()
+}
+
+loadMsg()
+</script>
 </body>
 </html>
