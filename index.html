@@ -2,264 +2,120 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<!-- 强制不缓存 -->
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>校园服务平台</title>
 <style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  background: #f2f4f7;
-  padding: 15px;
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.header {
-  text-align: center;
-  margin: 30px 0 20px;
-}
-.header h1 {
-  font-size: 24px;
-  font-weight: 600;
-  color: #111;
-}
-.header p {
-  font-size: 14px;
-  color: #888;
-  margin-top: 6px;
-}
-
-.login-box {
-  background: #fff;
-  padding: 16px;
-  border-radius: 16px;
-  display: flex;
-  gap: 10px;
-  margin-bottom: 16px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-}
-.login-box input {
-  flex: 1;
-  padding: 14px;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  font-size: 15px;
-  outline: none;
-}
-.login-box button {
-  padding: 0 18px;
-  background: #3b82f6;
-  color: #fff;
-  border: none;
-  border-radius: 12px;
-  font-weight: 500;
-}
-
-.admin-panel {
-  background: #fff;
-  padding: 20px;
-  border-radius: 16px;
-  margin-bottom: 16px;
-  display: none;
-}
-.admin-panel input,
-.admin-panel select {
-  width: 100%;
-  padding: 14px;
-  margin-bottom: 10px;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  font-size: 15px;
-}
-.admin-panel button {
-  width: 100%;
-  padding: 14px;
-  background: #3b82f6;
-  color: #fff;
-  border: none;
-  border-radius: 12px;
-  font-weight: 500;
-}
-
-.card {
-  background: #fff;
-  border-radius: 16px;
-  padding: 20px;
-  margin-bottom: 12px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
-}
-
-.tag {
-  display: inline-block;
-  padding: 5px 10px;
-  border-radius: 10px;
-  font-size: 12px;
-  font-weight: 600;
-  margin-bottom: 12px;
-}
-.tag-daike { background: #dbeafe; color: #1e40af; }
-.tag-kuaidi { background: #d1fae5; color: #065f46; }
-.tag-waimai { background: #ffedd5; color: #c2410c; }
-.tag-weituo { background: #ede9fe; color: #5b21b6; }
-
-.row {
-  margin-bottom: 14px;
-}
-.row .label {
-  font-size: 13px;
-  color: #9ca3af;
-  margin-bottom: 4px;
-}
-.row .val {
-  font-size: 15px;
-  font-weight: 500;
-  color: #111827;
-}
-.row .price {
-  font-size: 17px;
-  font-weight: 600;
-  color: #3b82f6;
-}
-
-.state {
-  display: inline-block;
-  padding: 4px 9px;
-  border-radius: 8px;
-  font-size: 12px;
-  background: #f3f4f6;
-  color: #6b7280;
-}
-.state.done {
-  background: #d1fae5;
-  color: #065f46;
-}
-
-.btns {
-  display: flex;
-  gap: 8px;
-  margin-top: 16px;
-}
-.btns button {
-  flex: 1;
-  padding: 10px;
-  border: none;
-  border-radius: 10px;
-  font-size: 14px;
-  font-weight: 500;
-}
-.btn-ok { background: #d1fae5; color: #065f46; }
-.btn-del { background: #fee2e2; color: #b91c1c; }
-
-.empty {
-  text-align: center;
-  padding: 60px 20px;
-  color: #aaa;
-}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f2f4f7;padding:15px;max-width:600px;margin:0 auto}
+.header{text-align:center;margin:30px 0}
+.header h1{font-size:24px}
+.header p{font-size:14px;color:#888;margin-top:6px}
+.login{background:#fff;padding:16px;border-radius:16px;display:flex;gap:10px;margin-bottom:16px}
+.login input{flex:1;padding:14px;border:1px solid #e5e7eb;border-radius:12px}
+.login button{padding:0 18px;background:#3b82f6;color:#fff;border:none;border-radius:12px}
+.admin{background:#fff;padding:20px;border-radius:16px;margin-bottom:16px;display:none}
+.admin input,.admin select{width:100%;padding:14px;margin-bottom:10px;border:1px solid #e5e7eb;border-radius:12px}
+.admin button{width:100%;padding:14px;background:#3b82f6;color:#fff;border:none;border-radius:12px}
+.card{background:#fff;border-radius:16px;padding:20px;margin-bottom:12px;box-shadow:0 2px 12px rgba(0,0,0,.05)}
+.tag{display:inline-block;padding:5px 10px;border-radius:10px;font-size:12px;margin-bottom:12px}
+.tag-daike{background:#dbeafe;color:#1e40af}
+.tag-kuaidi{background:#d1fae5;color:#065f46}
+.tag-waimai{background:#ffedd5;color:#c2410c}
+.tag-weituo{background:#ede9fe;color:#5b21b6}
+.row{margin-bottom:14px}
+.label{font-size:13px;color:#9ca3af}
+.val{font-size:15px;font-weight:500;margin-top:4px}
+.price{font-size:17px;color:#3b82f6}
+.state{display:inline-block;padding:4px 9px;border-radius:8px;font-size:12px;background:#f3f4f6}
+.btns{display:flex;gap:8px;margin-top:16px}
+.btns button{flex:1;padding:10px;border:none;border-radius:10px}
+.btn-ok{background:#d1fae5;color:#065f46}
+.btn-del{background:#fee2e2;color:#b91c1c}
+.empty{text-align:center;padding:60px;color:#aaa}
 </style>
 </head>
-
 <body>
 
 <div class="header">
   <h1>🛵 校园服务平台</h1>
-  <p>代课 · 快递 · 外卖 · 委托</p>
+  <p>代课 | 快递 | 外卖 | 委托</p>
 </div>
 
-<div class="login-box">
+<div class="login">
   <input type="password" id="pwd" placeholder="管理员密码">
   <button onclick="login()">登录</button>
 </div>
 
-<div class="admin-panel" id="adminPanel">
+<div class="admin" id="adminPanel">
   <select id="type">
     <option value="daike">代课</option>
     <option value="kuaidi">代取快递</option>
     <option value="waimai">代取外卖</option>
-    <option value="weituo">委托任务</option>
+    <option value="weituo">委托</option>
   </select>
-
   <input id="title" placeholder="任务说明">
   <input id="place" placeholder="地点">
   <input id="time" placeholder="时间">
   <input id="price" placeholder="价格">
   <input id="contact" placeholder="联系方式">
-
-  <button onclick="add()">发布任务</button>
+  <button onclick="post()">发布任务</button>
 </div>
 
 <div id="list"></div>
 
 <script>
-const ADMIN_PWD = "123456";
+const PWD = "123456";
 const user = "liangxd21";
 const repo = "liangxd21.github.io";
 
-// 带时间戳强制拉最新数据
-async function loadList() {
-  const el = document.getElementById("list");
-  el.innerHTML = "加载中...";
-  try {
-    const t = new Date().getTime(); // 时间戳防缓存
-    const res = await fetch(`https://api.github.com/repos/${user}/${repo}/issues?per_page=200&_t=`+t);
-    const list = await res.json();
-    if (!list.length) {
-      el.innerHTML = `<div class="empty">暂无任务</div>`;
-      return;
-    }
-
-    let html = "";
-    list.forEach(issue => {
-      try {
-        const d = JSON.parse(issue.title);
-        const isAdmin = document.getElementById("adminPanel").style.display === "block";
-        const typeName = { daike:"代课", kuaidi:"快递", waimai:"外卖", weituo:"委托" };
-
-        html += `
-        <div class="card">
-          <div class="tag tag-${d.type}">${typeName[d.type]}</div>
-          <div class="row"><div class="label">任务</div><div class="val">${d.title}</div></div>
-          <div class="row"><div class="label">地点</div><div class="val">${d.place}</div></div>
-          <div class="row"><div class="label">时间</div><div class="val">${d.time}</div></div>
-          <div class="row"><div class="label">报酬</div><div class="val price">${d.price}</div></div>
-          <div class="row"><div class="label">状态</div><div class="state ${d.done?'done':''}">${d.done ? '已完成' : '可接单'}</div></div>
-          <div class="row"><div class="label">联系</div><div class="val">${d.contact}</div></div>
-          
-          ${isAdmin ? `
-          <div class="btns">
-            <button class="btn-ok" onclick="done(${issue.number})">标完成</button>
-            <button class="btn-del" onclick="del(${issue.number})">删除任务</button>
-          </div>
-          ` : ''}
-        </div>`;
-      } catch (e) {}
-    });
-    el.innerHTML = html;
-  } catch (e) {
-    el.innerHTML = `<div class="empty">加载失败</div>`;
-  }
-}
-
 function login() {
-  if (document.getElementById("pwd").value === ADMIN_PWD) {
+  if (document.getElementById("pwd").value === PWD) {
     document.getElementById("adminPanel").style.display = "block";
     alert("✅ 登录成功");
-    loadList();
+    load();
   } else {
     alert("❌ 密码错误");
   }
 }
 
-function add() {
-  const data = JSON.stringify({
+async function load() {
+  const dom = document.getElementById("list");
+  dom.innerHTML = "加载中...";
+  try {
+    const res = await fetch(`https://api.github.com/repos/${user}/${repo}/issues?per_page=100&noCache=${Math.random()}`);
+    const data = await res.json();
+    if (!data.length) {
+      dom.innerHTML = "<div class='empty'>暂无任务</div>";
+      return;
+    }
+    let html = "";
+    data.forEach(item => {
+      try {
+        const task = JSON.parse(item.title);
+        const typeName = { daike: "代课", kuaidi: "快递", waimai: "外卖", weituo: "委托" };
+        html += `
+        <div class="card">
+          <div class="tag tag-${task.type}">${typeName[task.type]}</div>
+          <div class="row"><div class="label">任务</div><div class="val">${task.title}</div></div>
+          <div class="row"><div class="label">地点</div><div class="val">${task.place}</div></div>
+          <div class="row"><div class="label">时间</div><div class="val">${task.time}</div></div>
+          <div class="row"><div class="label">价格</div><div class="val price">${task.price}</div></div>
+          <div class="row"><div class="label">状态</div><div class="state">${task.done ? "已完成" : "可接单"}</div></div>
+          <div class="row"><div class="label">联系</div><div class="val">${task.contact}</div></div>
+        </div>`;
+      } catch (e) {}
+    });
+    dom.innerHTML = html;
+  } catch (e) {
+    dom.innerHTML = "<div class='empty'>加载失败，请刷新</div>";
+  }
+}
+
+function post() {
+  const task = {
     type: document.getElementById("type").value,
     title: document.getElementById("title").value,
     place: document.getElementById("place").value,
@@ -267,22 +123,11 @@ function add() {
     price: document.getElementById("price").value,
     contact: document.getElementById("contact").value,
     done: false
-  });
-  window.open(`https://github.com/${user}/${repo}/issues/new?title=${encodeURIComponent(data)}`);
+  };
+  window.open(`https://github.com/${user}/${repo}/issues/new?title=${encodeURIComponent(JSON.stringify(task))}`);
 }
 
-function done(num) {
-  alert("打开后编辑标题，将 done 改为 true 即为完成");
-  window.open(`https://github.com/${user}/${repo}/issues/${num}`);
-}
-
-function del(num) {
-  if (!confirm("确定删除？")) return;
-  window.open(`https://github.com/${user}/${repo}/issues/${num}`, "_blank");
-  alert("打开页面拉到最下方，点 Delete issue 即可删除");
-}
-
-loadList();
+load();
 </script>
 </body>
 </html>
