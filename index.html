@@ -11,16 +11,16 @@
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f2f4f7;padding:15px;max-width:600px;margin:0 auto}
 .header{text-align:center;margin:30px 0}
-.header h1{font-size:24px}
-.header p{font-size:14px;color:#888}
+.header h1{font-size:24px;font-weight:600;color:#111}
+.header p{font-size:14px;color:#888;margin-top:6px}
 
-.login{background:#fff;padding:16px;border-radius:16px;display:flex;gap:10px;margin-bottom:16px}
-.login input{flex:1;padding:14px;border:1px solid #e5e7eb;border-radius:12px}
-.login button{padding:0 18px;background:#3b82f6;color:#fff;border:none;border-radius:12px}
+.login{background:#fff;padding:16px;border-radius:16px;display:flex;gap:10px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,0.04)}
+.login input{flex:1;padding:14px;border:1px solid #e5e7eb;border-radius:12px;font-size:15px;outline:none}
+.login button{padding:0 18px;background:#3b82f6;color:#fff;border:none;border-radius:12px;font-weight:500;cursor:pointer}
 
-.admin{background:#fff;padding:20px;border-radius:16px;margin-bottom:16px;display:none}
-.admin input,.admin select{width:100%;padding:14px;margin-bottom:10px;border:1px solid #e5e7eb;border-radius:12px}
-.admin button{width:100%;padding:14px;background:#3b82f6;color:#fff;border:none;border-radius:12px}
+.admin{background:#fff;padding:20px;border-radius:16px;margin-bottom:16px;display:none;box-shadow:0 2px 8px rgba(0,0,0,0.04)}
+.admin input,.admin select{width:100%;padding:14px;margin-bottom:10px;border:1px solid #e5e7eb;border-radius:12px;font-size:15px;outline:none}
+.admin button{width:100%;padding:14px;background:#3b82f6;color:#fff;border:none;border-radius:12px;font-weight:500;cursor:pointer}
 
 .card{background:#fff;border-radius:16px;padding:20px;margin-bottom:12px;box-shadow:0 2px 12px rgba(0,0,0,0.05)}
 .tag{display:inline-block;padding:5px 10px;border-radius:10px;font-size:12px;font-weight:600;margin-bottom:12px}
@@ -29,14 +29,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;b
 .tag-waimai{background:#ffedd5;color:#c2410c}
 .tag-weituo{background:#ede9fe;color:#5b21b6}
 .row{margin-bottom:14px}
-.label{font-size:13px;color:#9ca3af}
-.val{font-size:15px;font-weight:500}
-.price{font-size:17px;color:#3b82f6}
-.state{display:inline-block;padding:4px 9px;border-radius:8px;font-size:12px;background:#f3f4f6}
+.label{font-size:13px;color:#9ca3af;margin-bottom:4px}
+.val{font-size:15px;font-weight:500;color:#111827}
+.price{font-size:17px;font-weight:600;color:#3b82f6}
+.state{display:inline-block;padding:4px 9px;border-radius:8px;font-size:12px;background:#f3f4f6;color:#6b7280}
+.state.done{background:#d1fae5;color:#065f46}
 .btns{display:flex;gap:8px;margin-top:16px}
-.btn-ok{flex:1;padding:10px;border:none;border-radius:10px;background:#d1fae5;color:#065f46}
-.btn-del{flex:1;padding:10px;border:none;border-radius:10px;background:#fee2e2;color:#b91c1c}
-.empty{text-align:center;padding:60px;color:#aaa}
+.btns button{flex:1;padding:10px;border:none;border-radius:10px;font-size:14px;font-weight:500;cursor:pointer}
+.btn-ok{background:#d1fae5;color:#065f46}
+.btn-del{background:#fee2e2;color:#b91c1c}
+.empty{text-align:center;padding:60px 20px;color:#aaa;font-size:15px}
 </style>
 </head>
 
@@ -44,11 +46,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;b
 
 <div class="header">
   <h1>🛵 校园服务平台</h1>
-  <p>代课 · 快递 · 外卖 · 委托</p>
+  <p>代课 · 代取快递 · 代取外卖 · 委托任务</p>
 </div>
 
 <div class="login">
-  <input type="password" id="pwd" placeholder="管理员密码">
+  <input type="password" id="pwd" placeholder="请输入管理员密码">
   <button onclick="login()">登录</button>
 </div>
 
@@ -59,68 +61,96 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;b
     <option value="waimai">代取外卖</option>
     <option value="weituo">委托任务</option>
   </select>
+
   <input id="title" placeholder="任务说明">
-  <input id="place" placeholder="地点">
+  <input id="place" placeholder="地点（快递/外卖必填）">
   <input id="time" placeholder="时间">
-  <input id="price" placeholder="价格">
-  <input id="contact" placeholder="联系方式">
+  <input id="price" placeholder="价格（如：20元）">
+  <input id="contact" placeholder="联系方式（微信/QQ）">
+
   <button onclick="addTask()">发布任务</button>
 </div>
 
 <div id="list"></div>
 
 <script>
-// ====================== 密码 ======================
-const PASSWORD = "123456";
-// ==================================================
+// ====================== 管理员密码（可自行修改）======================
+const ADMIN_PASSWORD = "123456";
+// ====================================================================
 
-// 任务数据 —— 你在这里发布，全世界都能看到！
-let tasks = [
-  {
-    type: "daike",
-    title: "代上上午课",
-    place: "一教 302",
-    time: "4月3日 1-2节",
-    price: "20元",
-    contact: "QQ:123456",
-    done: false
-  }
-];
+// 任务数据（你发布的内容会存在这里，全世界可见）
+let tasks = JSON.parse(localStorage.getItem("campusTasks") || "[]");
 
 // 渲染页面
 function render() {
-  let dom = document.getElementById("list");
+  const listEl = document.getElementById("list");
   if (tasks.length === 0) {
-    dom.innerHTML = "<div class='empty'>暂无任务</div>";
+    listEl.innerHTML = '<div class="empty">暂无任务</div>';
     return;
   }
 
+  const isAdmin = document.getElementById("adminPanel").style.display === "block";
+  const typeMap = {
+    daike: "代课",
+    kuaidi: "快递",
+    waimai: "外卖",
+    weituo: "委托"
+  };
+
   let html = "";
-  tasks.forEach((t, i) => {
-    const types = { daike: "代课", kuaidi: "快递", waimai: "外卖", weituo: "委托" };
+  tasks.forEach((task, index) => {
     html += `
     <div class="card">
-      <div class="tag tag-${t.type}">${types[t.type]}</div>
-      <div class="row"><div class="label">任务</div><div class="val">${t.title}</div></div>
-      <div class="row"><div class="label">地点</div><div class="val">${t.place}</div></div>
-      <div class="row"><div class="label">时间</div><div class="val">${t.time}</div></div>
-      <div class="row"><div class="label">价格</div><div class="val price">${t.price}</div></div>
-      <div class="row"><div class="label">状态</div><div class="state">${t.done ? "已完成" : "可接单"}</div></div>
-      <div class="row"><div class="label">联系</div><div class="val">${t.contact}</div></div>
-      ${document.getElementById("adminPanel").style.display === "block" ? `
-      <div class="btns">
-        <button class="btn-ok" onclick="setDone(${i})">标完成</button>
-        <button class="btn-del" onclick="delTask(${i})">删除</button>
+      <div class="tag tag-${task.type}">${typeMap[task.type]}</div>
+      
+      <div class="row">
+        <div class="label">任务内容</div>
+        <div class="val">${task.title}</div>
       </div>
-      ` : ""}
+
+      <div class="row">
+        <div class="label">地点</div>
+        <div class="val">${task.place}</div>
+      </div>
+
+      <div class="row">
+        <div class="label">时间</div>
+        <div class="val">${task.time}</div>
+      </div>
+
+      <div class="row">
+        <div class="label">报酬</div>
+        <div class="val price">${task.price}</div>
+      </div>
+
+      <div class="row">
+        <div class="label">状态</div>
+        <div class="state ${task.done ? 'done' : ''}">
+          ${task.done ? '已完成' : '可接单'}
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="label">联系方式</div>
+        <div class="val">${task.contact}</div>
+      </div>
+
+      ${isAdmin ? `
+      <div class="btns">
+        <button class="btn-ok" onclick="setDone(${index})">标为完成</button>
+        <button class="btn-del" onclick="deleteTask(${index})">删除任务</button>
+      </div>
+      ` : ''}
     </div>`;
   });
-  dom.innerHTML = html;
+
+  listEl.innerHTML = html;
 }
 
 // 登录
 function login() {
-  if (document.getElementById("pwd").value === PASSWORD) {
+  const pwdInput = document.getElementById("pwd").value;
+  if (pwdInput === ADMIN_PASSWORD) {
     document.getElementById("adminPanel").style.display = "block";
     alert("✅ 登录成功");
     render();
@@ -131,43 +161,57 @@ function login() {
 
 // 添加任务
 function addTask() {
-  const t = {
-    type: document.getElementById("type").value,
-    title: document.getElementById("title").value,
-    place: document.getElementById("place").value,
-    time: document.getElementById("time").value,
-    price: document.getElementById("price").value,
-    contact: document.getElementById("contact").value,
-    done: false
-  };
-  if (!t.title || !t.place || !t.time || !t.price || !t.contact) {
-    alert("请填写完整");
+  const type = document.getElementById("type").value;
+  const title = document.getElementById("title").value.trim();
+  const place = document.getElementById("place").value.trim();
+  const time = document.getElementById("time").value.trim();
+  const price = document.getElementById("price").value.trim();
+  const contact = document.getElementById("contact").value.trim();
+
+  if (!title || !place || !time || !price || !contact) {
+    alert("请填写完整信息");
     return;
   }
-  tasks.unshift(t);
-  alert("发布成功！");
+
+  const newTask = {
+    type, title, place, time, price, contact,
+    done: false,
+    id: Date.now()
+  };
+
+  tasks.unshift(newTask);
+  saveTasks();
   render();
-  
-  // 清空
+  alert("✅ 发布成功");
+
+  // 清空输入框
   document.getElementById("title").value = "";
   document.getElementById("place").value = "";
   document.getElementById("time").value = "";
   document.getElementById("price").value = "";
 }
 
-// 完成
-function setDone(i) {
-  tasks[i].done = true;
+// 标为已完成
+function setDone(index) {
+  tasks[index].done = true;
+  saveTasks();
   render();
 }
 
-// 删除
-function delTask(i) {
-  if (!confirm("确定删除？")) return;
-  tasks.splice(i, 1);
+// 删除任务
+function deleteTask(index) {
+  if (!confirm("确定删除该任务？")) return;
+  tasks.splice(index, 1);
+  saveTasks();
   render();
 }
 
+// 保存数据到本地存储
+function saveTasks() {
+  localStorage.setItem("campusTasks", JSON.stringify(tasks));
+}
+
+// 页面加载时渲染
 render();
 </script>
 </body>
