@@ -2,6 +2,10 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
+<!-- 强制不缓存 -->
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>校园服务平台</title>
 <style>
@@ -199,12 +203,13 @@ const ADMIN_PWD = "123456";
 const user = "liangxd21";
 const repo = "liangxd21.github.io";
 
-// 读取任务
+// 带时间戳强制拉最新数据
 async function loadList() {
   const el = document.getElementById("list");
   el.innerHTML = "加载中...";
   try {
-    const res = await fetch(`https://api.github.com/repos/${user}/${repo}/issues?per_page=200`);
+    const t = new Date().getTime(); // 时间戳防缓存
+    const res = await fetch(`https://api.github.com/repos/${user}/${repo}/issues?per_page=200&_t=`+t);
     const list = await res.json();
     if (!list.length) {
       el.innerHTML = `<div class="empty">暂无任务</div>`;
@@ -243,7 +248,6 @@ async function loadList() {
   }
 }
 
-// 登录
 function login() {
   if (document.getElementById("pwd").value === ADMIN_PWD) {
     document.getElementById("adminPanel").style.display = "block";
@@ -254,7 +258,6 @@ function login() {
   }
 }
 
-// 发布
 function add() {
   const data = JSON.stringify({
     type: document.getElementById("type").value,
@@ -268,17 +271,15 @@ function add() {
   window.open(`https://github.com/${user}/${repo}/issues/new?title=${encodeURIComponent(data)}`);
 }
 
-// 标完成
 function done(num) {
-  alert("请打开任务页面，将标题里的 done 改为 true");
+  alert("打开后编辑标题，将 done 改为 true 即为完成");
   window.open(`https://github.com/${user}/${repo}/issues/${num}`);
 }
 
-// 删除（修复可用版）
 function del(num) {
   if (!confirm("确定删除？")) return;
   window.open(`https://github.com/${user}/${repo}/issues/${num}`, "_blank");
-  alert("打开页面后，拉到最下方 → Delete issue 即可删除");
+  alert("打开页面拉到最下方，点 Delete issue 即可删除");
 }
 
 loadList();
