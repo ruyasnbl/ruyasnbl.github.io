@@ -19,7 +19,6 @@ body {
   margin: 0 auto;
 }
 
-/* 头部 */
 .header {
   text-align: center;
   margin: 30px 0 20px;
@@ -35,7 +34,6 @@ body {
   margin-top: 6px;
 }
 
-/* 登录 */
 .login-box {
   background: #fff;
   padding: 16px;
@@ -52,10 +50,6 @@ body {
   border-radius: 12px;
   font-size: 15px;
   outline: none;
-  transition: border 0.2s;
-}
-.login-box input:focus {
-  border-color: #3b82f6;
 }
 .login-box button {
   padding: 0 18px;
@@ -64,17 +58,14 @@ body {
   border: none;
   border-radius: 12px;
   font-weight: 500;
-  cursor: pointer;
 }
 
-/* 管理面板 */
 .admin-panel {
   background: #fff;
   padding: 20px;
   border-radius: 16px;
   margin-bottom: 16px;
   display: none;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
 }
 .admin-panel input,
 .admin-panel select {
@@ -84,7 +75,6 @@ body {
   border: 1px solid #e5e7eb;
   border-radius: 12px;
   font-size: 15px;
-  outline: none;
 }
 .admin-panel button {
   width: 100%;
@@ -94,11 +84,8 @@ body {
   border: none;
   border-radius: 12px;
   font-weight: 500;
-  font-size: 15px;
-  cursor: pointer;
 }
 
-/* 任务卡片 */
 .card {
   background: #fff;
   border-radius: 16px;
@@ -107,7 +94,6 @@ body {
   box-shadow: 0 2px 12px rgba(0,0,0,0.05);
 }
 
-/* 任务类型标签 */
 .tag {
   display: inline-block;
   padding: 5px 10px;
@@ -153,7 +139,6 @@ body {
   color: #065f46;
 }
 
-/* 管理按钮 */
 .btns {
   display: flex;
   gap: 8px;
@@ -167,20 +152,13 @@ body {
   font-size: 14px;
   font-weight: 500;
 }
-.btn-ok {
-  background: #d1fae5;
-  color: #065f46;
-}
-.btn-del {
-  background: #fee2e2;
-  color: #b91c1c;
-}
+.btn-ok { background: #d1fae5; color: #065f46; }
+.btn-del { background: #fee2e2; color: #b91c1c; }
 
 .empty {
   text-align: center;
   padding: 60px 20px;
   color: #aaa;
-  font-size: 15px;
 }
 </style>
 </head>
@@ -189,11 +167,11 @@ body {
 
 <div class="header">
   <h1>🛵 校园服务平台</h1>
-  <p>代课 · 代取快递 · 代取外卖 · 委托任务</p>
+  <p>代课 · 快递 · 外卖 · 委托</p>
 </div>
 
 <div class="login-box">
-  <input type="password" id="pwd" placeholder="请输入管理员密码">
+  <input type="password" id="pwd" placeholder="管理员密码">
   <button onclick="login()">登录</button>
 </div>
 
@@ -206,10 +184,10 @@ body {
   </select>
 
   <input id="title" placeholder="任务说明">
-  <input id="place" placeholder="地点（快递/外卖必填）">
+  <input id="place" placeholder="地点">
   <input id="time" placeholder="时间">
-  <input id="price" placeholder="价格（如：20元）">
-  <input id="contact" placeholder="联系方式（微信/QQ）">
+  <input id="price" placeholder="价格">
+  <input id="contact" placeholder="联系方式">
 
   <button onclick="add()">发布任务</button>
 </div>
@@ -221,11 +199,12 @@ const ADMIN_PWD = "123456";
 const user = "liangxd21";
 const repo = "liangxd21.github.io";
 
+// 读取任务
 async function loadList() {
   const el = document.getElementById("list");
   el.innerHTML = "加载中...";
   try {
-    const res = await fetch(`https://api.github.com/repos/${user}/${repo}/issues?per_page=100`);
+    const res = await fetch(`https://api.github.com/repos/${user}/${repo}/issues?per_page=200`);
     const list = await res.json();
     if (!list.length) {
       el.innerHTML = `<div class="empty">暂无任务</div>`;
@@ -237,52 +216,22 @@ async function loadList() {
       try {
         const d = JSON.parse(issue.title);
         const isAdmin = document.getElementById("adminPanel").style.display === "block";
-        const typeName = {
-          daike: "代课",
-          kuaidi: "快递",
-          waimai: "外卖",
-          weituo: "委托"
-        };
+        const typeName = { daike:"代课", kuaidi:"快递", waimai:"外卖", weituo:"委托" };
+
         html += `
         <div class="card">
           <div class="tag tag-${d.type}">${typeName[d.type]}</div>
-
-          <div class="row">
-            <div class="label">任务内容</div>
-            <div class="val">${d.title}</div>
-          </div>
-
-          <div class="row">
-            <div class="label">地点</div>
-            <div class="val">${d.place}</div>
-          </div>
-
-          <div class="row">
-            <div class="label">时间</div>
-            <div class="val">${d.time}</div>
-          </div>
-
-          <div class="row">
-            <div class="label">报酬</div>
-            <div class="val price">${d.price}</div>
-          </div>
-
-          <div class="row">
-            <div class="label">状态</div>
-            <div class="state ${d.done ? 'done' : ''}">
-              ${d.done ? '已完成' : '可接单'}
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="label">联系方式</div>
-            <div class="val">${d.contact}</div>
-          </div>
-
+          <div class="row"><div class="label">任务</div><div class="val">${d.title}</div></div>
+          <div class="row"><div class="label">地点</div><div class="val">${d.place}</div></div>
+          <div class="row"><div class="label">时间</div><div class="val">${d.time}</div></div>
+          <div class="row"><div class="label">报酬</div><div class="val price">${d.price}</div></div>
+          <div class="row"><div class="label">状态</div><div class="state ${d.done?'done':''}">${d.done ? '已完成' : '可接单'}</div></div>
+          <div class="row"><div class="label">联系</div><div class="val">${d.contact}</div></div>
+          
           ${isAdmin ? `
           <div class="btns">
-            <button class="btn-ok" onclick="done(${issue.number})">标为完成</button>
-            <button class="btn-del" onclick="del(${issue.number})">删除</button>
+            <button class="btn-ok" onclick="done(${issue.number})">标完成</button>
+            <button class="btn-del" onclick="del(${issue.number})">删除任务</button>
           </div>
           ` : ''}
         </div>`;
@@ -290,13 +239,13 @@ async function loadList() {
     });
     el.innerHTML = html;
   } catch (e) {
-    el.innerHTML = `<div class="empty">加载失败，请刷新</div>`;
+    el.innerHTML = `<div class="empty">加载失败</div>`;
   }
 }
 
+// 登录
 function login() {
-  const v = document.getElementById("pwd").value;
-  if (v === ADMIN_PWD) {
+  if (document.getElementById("pwd").value === ADMIN_PWD) {
     document.getElementById("adminPanel").style.display = "block";
     alert("✅ 登录成功");
     loadList();
@@ -305,34 +254,31 @@ function login() {
   }
 }
 
+// 发布
 function add() {
-  const type = document.getElementById("type").value;
-  const title = document.getElementById("title").value.trim();
-  const place = document.getElementById("place").value.trim();
-  const time = document.getElementById("time").value.trim();
-  const price = document.getElementById("price").value.trim();
-  const contact = document.getElementById("contact").value.trim();
-
-  if (!title || !place || !time || !price || !contact) {
-    alert("请填写完整信息");
-    return;
-  }
-
   const data = JSON.stringify({
-    type, title, place, time, price, contact, done: false
+    type: document.getElementById("type").value,
+    title: document.getElementById("title").value,
+    place: document.getElementById("place").value,
+    time: document.getElementById("time").value,
+    price: document.getElementById("price").value,
+    contact: document.getElementById("contact").value,
+    done: false
   });
-
   window.open(`https://github.com/${user}/${repo}/issues/new?title=${encodeURIComponent(data)}`);
 }
 
+// 标完成
 function done(num) {
-  alert("请在 GitHub 页面编辑状态");
+  alert("请打开任务页面，将标题里的 done 改为 true");
   window.open(`https://github.com/${user}/${repo}/issues/${num}`);
 }
 
+// 删除（修复可用版）
 function del(num) {
-  if (!confirm("确定删除该任务？")) return;
-  window.open(`https://github.com/${user}/${repo}/issues/${num}`);
+  if (!confirm("确定删除？")) return;
+  window.open(`https://github.com/${user}/${repo}/issues/${num}`, "_blank");
+  alert("打开页面后，拉到最下方 → Delete issue 即可删除");
 }
 
 loadList();
